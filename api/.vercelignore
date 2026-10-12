@@ -1,0 +1,6 @@
+tests/
+scripts/
+.cache/
+__pycache__/
+model_store/pipeline_v1.0/
+model_store/logistic_regression/predictions_logistic_regression.parquet

@@ -1,0 +1,826 @@
+{
+  "meta": {
+    "title": "Late delivery risk on the DataCo supply chain dataset",
+    "group": "2026-DS-15",
+    "module": "IT3091 Machine Learning",
+    "built": "2026-10-12",
+    "sources": [
+      "Model_Comparison_Summary.docx",
+      "IT24102928.md",
+      "IT24102255.md",
+      "IT24102397.md",
+      "IT24102901.md",
+      "IT3091_2026-DS-15_Initial_Submission.pdf"
+    ]
+  },
+  "members": [
+    {
+      "id": "IT24102928",
+      "name": "Madushani G.R.",
+      "short": "Madushani",
+      "models": [
+        "logistic_regression",
+        "naive_bayes"
+      ]
+    },
+    {
+      "id": "IT24102255",
+      "name": "Ranthisaru T.K.K.",
+      "short": "Ranthisaru",
+      "models": [
+        "knn",
+        "linear_svm"
+      ]
+    },
+    {
+      "id": "IT24102397",
+      "name": "Ratnaweera D.U.A.",
+      "short": "Ratnaweera",
+      "models": [
+        "decision_tree",
+        "random_forest"
+      ]
+    },
+    {
+      "id": "IT24102901",
+      "name": "Maheepala S.A.D.A.O.",
+      "short": "Maheepala",
+      "models": [
+        "adaboost",
+        "xgboost"
+      ]
+    }
+  ],
+  "facts": {
+    "target": "Late_delivery_risk (1 = late, 0 = on time)",
+    "late_rate": 0.573,
+    "splits": {
+      "train": 44492,
+      "validation": 4564,
+      "test": 13071
+    },
+    "split_dates": {
+      "train": "2015-01-01 to 2017-03-24",
+      "validation": "2017-04-01 to 2017-06-23",
+      "test": "2017-07-01 to 2018-01-31"
+    },
+    "cv": {
+      "folds": 5,
+      "gap_orders": 448,
+      "scheme": "time-ordered, expanding window"
+    },
+    "orders_total": 62897,
+    "input_features": 20,
+    "model_columns": 54,
+    "ceiling_roc": 0.775,
+    "tie_zone": 0.005,
+    "fit_limit": 0.03,
+    "champion_cutoff": 0.604,
+    "tiers": {
+      "Medium": 0.6,
+      "High": 0.9
+    }
+  },
+  "baseline": {
+    "name": "Simple shipping-mode rule",
+    "cv_roc": 0.7748,
+    "test_roc": 0.7771,
+    "test_brier": 0.1733,
+    "cv_pr": 0.8018,
+    "cv_pr_ties_fair": 0.8562,
+    "test_pr": 0.8048,
+    "how": "Predicted risk = the training late rate of the order's group: its shipping mode, and for Same Day orders, whether it came in after 12:00. Five groups, no machine learning."
+  },
+  "no_skill": {
+    "cv_pr": 0.5741,
+    "cv_roc": 0.5,
+    "brier": 0.2445
+  },
+  "models": [
+    {
+      "key": "logistic_regression",
+      "rank": "1",
+      "rank_order": 1,
+      "name": "Logistic Regression",
+      "owner_id": "IT24102928",
+      "owner_name": "Madushani G.R.",
+      "owner_short": "Madushani",
+      "label": "Logistic Regression (Madushani IT24102928)",
+      "score": 88.8,
+      "cv_roc": 0.7743,
+      "test_roc": 0.7793,
+      "test_pr": 0.8593,
+      "test_brier": 0.1735,
+      "cv_pr": 0.8564,
+      "fit_gap": 0.0019,
+      "main_reason": "Simple, readable, clean fit and protocol",
+      "champion": true,
+      "status": {
+        "kind": "champion",
+        "flags": []
+      },
+      "served": true,
+      "family": "Linear model",
+      "source": "IT24102928.md, sections 5.2 to 5.12",
+      "how": "Adds up a weight for each column, then turns the sum into a probability with the sigmoid curve. Each weight can be read as an odds ratio.",
+      "settings": {
+        "Pipeline": "shared preprocessor v1.0, drop constant columns, keep top k columns (ANOVA F-test), LogisticRegression",
+        "Columns kept (k)": "20 of 54",
+        "C": "0.1",
+        "Penalty": "L2",
+        "Class weight": "none",
+        "Calibration": "none (raw probabilities were already honest)",
+        "Cut-off": "0.6040"
+      },
+      "strengths": [
+        "No weak cell on the scorecard and a clean protocol.",
+        "Easiest to explain: each weight is an odds ratio. Shipping mode and the Same Day after-noon flag do almost all the work.",
+        "Honest probabilities without any calibration (test Brier 0.1735).",
+        "No overfitting: train minus CV PR-AUC is +0.0019."
+      ],
+      "weaknesses": [
+        "Only adds effects together, so it needs the same_day_after_cutoff flag to see the noon rule.",
+        "Does not beat the simple rule: CV ROC-AUC 0.7743 against the rule's 0.7748.",
+        "Its scores have only a few distinct values, so risk tiers mostly copy the shipping mode."
+      ],
+      "drivers": [
+        {
+          "feature": "Same Day after 12:00",
+          "coef": 5.5161,
+          "odds_ratio": 248.67
+        },
+        {
+          "feature": "First Class",
+          "coef": 4.3032,
+          "odds_ratio": 73.94
+        },
+        {
+          "feature": "Second Class",
+          "coef": 0.5988,
+          "odds_ratio": 1.8199
+        },
+        {
+          "feature": "Standard Class",
+          "coef": -1.1893,
+          "odds_ratio": 0.3044
+        },
+        {
+          "feature": "Same Day",
+          "coef": -3.3487,
+          "odds_ratio": 0.0351
+        }
+      ],
+      "improve": [
+        "Keep it as the explainable champion and report the odds ratios.",
+        "Only new information (warehouse workload, carrier, distance, weather) could lift the score."
+      ]
+    },
+    {
+      "key": "adaboost",
+      "rank": "2=",
+      "rank_order": 2,
+      "name": "AdaBoost",
+      "owner_id": "IT24102901",
+      "owner_name": "Maheepala S.A.D.A.O.",
+      "owner_short": "Maheepala",
+      "label": "AdaBoost (Maheepala IT24102901)",
+      "score": 86.7,
+      "cv_roc": 0.7748,
+      "test_roc": 0.7771,
+      "test_pr": 0.8048,
+      "test_brier": 0.1733,
+      "cv_pr": 0.8018,
+      "fit_gap": -0.0025,
+      "main_reason": "Equals the rule, adds nothing new",
+      "champion": false,
+      "status": {
+        "kind": "evidence",
+        "flags": [
+          {
+            "level": "warn",
+            "text": "Test set seen twice (Part A, then Part B)"
+          }
+        ]
+      },
+      "served": false,
+      "family": "Boosting",
+      "source": "IT24102901.md, sections 4.1 to 4.10",
+      "how": "Builds small trees one after another. Each new tree focuses on the orders the earlier trees got wrong. The final score is a weighted vote.",
+      "settings": {
+        "Model": "tuned AdaBoost, round 1 settings",
+        "Trees": "50",
+        "Tree depth": "2",
+        "Learning rate": "0.5",
+        "Columns": "shipping_mode dummies and same_day_after_cutoff",
+        "Size": "150 leaves",
+        "Calibration": "isotonic, fitted on out-of-fold scores"
+      },
+      "strengths": [
+        "Best fit gap of the eight (-0.0025).",
+        "Matches the simple rule exactly on the test set.",
+        "Calibration cut the Brier score by 0.0186."
+      ],
+      "weaknesses": [
+        "Adds nothing over a one-line rule, but is heavier.",
+        "Lower PR-AUC (0.8048) is a tie effect, not worse ranking.",
+        "The test set was seen twice (Part A, then Part B)."
+      ],
+      "improve": [
+        "Report it next to the simple rule, since the two give the same predictions.",
+        "State plainly that the test set was looked at before Part B."
+      ]
+    },
+    {
+      "key": "xgboost",
+      "rank": "2=",
+      "rank_order": 3,
+      "name": "XGBoost",
+      "owner_id": "IT24102901",
+      "owner_name": "Maheepala S.A.D.A.O.",
+      "owner_short": "Maheepala",
+      "label": "XGBoost (Maheepala IT24102901)",
+      "score": 86.7,
+      "cv_roc": 0.7748,
+      "test_roc": 0.7771,
+      "test_pr": 0.8048,
+      "test_brier": 0.1733,
+      "cv_pr": 0.8018,
+      "fit_gap": -0.0025,
+      "main_reason": "Same final predictions as AdaBoost",
+      "champion": false,
+      "status": {
+        "kind": "evidence",
+        "flags": [
+          {
+            "level": "warn",
+            "text": "Test set seen twice (Part A, then Part B)"
+          }
+        ]
+      },
+      "served": false,
+      "family": "Boosting",
+      "source": "IT24102901.md, sections 5.1 to 5.12",
+      "how": "Builds trees one after another, each fitted to the remaining errors of the trees before it. Has built-in brakes: depth limits, minimum leaf weight, row sampling and L2 regularisation.",
+      "settings": {
+        "Model": "tuned XGBoost, round 1 settings",
+        "Trees": "100",
+        "Tree depth": "2",
+        "Learning rate": "0.3",
+        "Min child weight": "20",
+        "Columns": "shipping_mode dummies and same_day_after_cutoff",
+        "Size": "303 leaves in CV (305 on all training orders)",
+        "Calibration": "not used"
+      },
+      "strengths": [
+        "Fixed a badly overfitted baseline: the gap fell from +0.1097 to -0.0025.",
+        "Same final predictions as AdaBoost and the simple rule.",
+        "Fast: 0.05 s to score 13,071 orders."
+      ],
+      "weaknesses": [
+        "Adds nothing over the simple rule.",
+        "Lower PR-AUC (0.8048) is a tie effect, not worse ranking.",
+        "The test set was seen twice (Part A, then Part B)."
+      ],
+      "improve": [
+        "Report it next to the simple rule.",
+        "State plainly that the test set was looked at before Part B."
+      ]
+    },
+    {
+      "key": "linear_svm",
+      "rank": "4",
+      "rank_order": 4,
+      "name": "Linear SVM",
+      "owner_id": "IT24102255",
+      "owner_name": "Ranthisaru T.K.K.",
+      "owner_short": "Ranthisaru",
+      "label": "Linear SVM (Ranthisaru IT24102255)",
+      "score": 86.6,
+      "cv_roc": 0.7742,
+      "test_roc": 0.7793,
+      "test_pr": 0.8599,
+      "test_brier": 0.1736,
+      "cv_pr": 0.8564,
+      "fit_gap": 0.0027,
+      "main_reason": "Fast, healthy fit, needs calibration",
+      "champion": false,
+      "status": {
+        "kind": "ok",
+        "flags": []
+      },
+      "served": false,
+      "family": "Margin-based linear model",
+      "source": "IT24102255.md, sections 3.2, 6 and 8.2",
+      "how": "Draws the flat boundary that separates late from on-time orders with the widest margin. Its output is a distance from that boundary, which is then calibrated into a probability.",
+      "settings": {
+        "Pipeline": "shared preprocessor v1.0, LinearSVC",
+        "Columns": "all 54",
+        "C": "0.01",
+        "Penalty": "L2",
+        "Class weight": "balanced",
+        "Calibration": "isotonic, learned on out-of-fold training scores",
+        "Threshold A": "0.5889"
+      },
+      "strengths": [
+        "Strong numbers: test ROC-AUC 0.7793 and test PR-AUC 0.8599.",
+        "Very fast (0.03 s).",
+        "Healthy fit."
+      ],
+      "weaknesses": [
+        "Needs a calibration step, because its raw output is not a probability.",
+        "Does not beat the simple rule."
+      ],
+      "improve": [
+        "Keep the isotonic calibration and report it as part of the model."
+      ]
+    },
+    {
+      "key": "knn",
+      "rank": "5",
+      "rank_order": 5,
+      "name": "KNN",
+      "owner_id": "IT24102255",
+      "owner_name": "Ranthisaru T.K.K.",
+      "owner_short": "Ranthisaru",
+      "label": "KNN (Ranthisaru IT24102255)",
+      "score": 85.0,
+      "cv_roc": 0.7756,
+      "test_roc": 0.7797,
+      "test_pr": 0.8534,
+      "test_brier": 0.1733,
+      "cv_pr": 0.8517,
+      "fit_gap": 0.0,
+      "main_reason": "Best numbers, but slow and heavy",
+      "champion": false,
+      "status": {
+        "kind": "ok",
+        "flags": []
+      },
+      "served": false,
+      "family": "Distance-based",
+      "source": "IT24102255.md, sections 3.1, 6 and 8.1",
+      "how": "Finds the most similar past orders and uses the share of them that were late as the probability.",
+      "settings": {
+        "Pipeline": "shared preprocessor v1.0, SelectKBest(f_classif, k=6), KNeighborsClassifier",
+        "Columns kept": "6 of 54",
+        "Neighbours (k)": "801",
+        "Weights": "distance",
+        "Distance": "p = 1 (city-block)",
+        "Training data": "all 44,492 training orders",
+        "Calibration": "none",
+        "Threshold A": "0.5999"
+      },
+      "strengths": [
+        "Full marks on ranking power: the highest CV ROC-AUC (0.7756) and test ROC-AUC (0.7797).",
+        "No overfitting (gap 0.0000)."
+      ],
+      "weaknesses": [
+        "Slow: 9.6 s per 7,415 orders.",
+        "Stores all training data.",
+        "Its lead of 0.0008 over the rule is noise."
+      ],
+      "improve": [
+        "Only worth it if raw ranking matters more than speed and simplicity."
+      ]
+    },
+    {
+      "key": "naive_bayes",
+      "rank": "6",
+      "rank_order": 6,
+      "name": "Naive Bayes",
+      "owner_id": "IT24102928",
+      "owner_name": "Madushani G.R.",
+      "owner_short": "Madushani",
+      "label": "Naive Bayes (Madushani IT24102928)",
+      "score": 58.9,
+      "cv_roc": 0.7693,
+      "test_roc": 0.7791,
+      "test_pr": 0.8593,
+      "test_brier": 0.1763,
+      "cv_pr": 0.854,
+      "fit_gap": 0.0024,
+      "main_reason": "Below the rule on CV ROC, weak probabilities",
+      "champion": false,
+      "status": {
+        "kind": "fail",
+        "flags": [
+          {
+            "level": "fail",
+            "text": "Fails ladder step 2: 0.0055 below the rule"
+          }
+        ]
+      },
+      "served": false,
+      "family": "Probabilistic",
+      "source": "IT24102928.md, sections 6.1 to 6.12",
+      "how": "Uses Bayes' rule and multiplies the evidence from every column, assuming the columns are independent once the class is known.",
+      "settings": {
+        "Variant": "Gaussian NB",
+        "var_smoothing": "1e-6",
+        "Columns kept (k)": "12 of 54",
+        "Calibration": "sigmoid (Platt)",
+        "Cut-off": "0.5656"
+      },
+      "strengths": [
+        "Fast and simple.",
+        "No overfitting: the gap is +0.0024."
+      ],
+      "weaknesses": [
+        "Fails ladder step 2: CV ROC-AUC 0.7693 is 0.0055 below the rule.",
+        "Poor raw probabilities: overlapping columns repeat the same evidence. Worst test Brier (0.1763).",
+        "Widest fold spread."
+      ],
+      "improve": [
+        "Keep the sigmoid calibration: it cut the validation Brier score from 0.3875 to 0.1804."
+      ]
+    },
+    {
+      "key": "decision_tree",
+      "rank": "7",
+      "rank_order": 7,
+      "name": "Decision Tree",
+      "owner_id": "IT24102397",
+      "owner_name": "Ratnaweera D.U.A.",
+      "owner_short": "Ratnaweera",
+      "label": "Decision Tree (Ratnaweera IT24102397)",
+      "score": 58.2,
+      "cv_roc": 0.7754,
+      "test_roc": 0.7787,
+      "test_pr": 0.8588,
+      "test_brier": null,
+      "cv_pr": 0.8555,
+      "fit_gap": 0.0263,
+      "main_reason": "Test set used to pick pipeline, gap 0.026",
+      "champion": false,
+      "status": {
+        "kind": "evidence",
+        "flags": [
+          {
+            "level": "warn",
+            "text": "Pipeline picked using test scores"
+          },
+          {
+            "level": "warn",
+            "text": "Brier score not reported"
+          }
+        ]
+      },
+      "served": false,
+      "family": "Trees",
+      "source": "IT24102397.md, sections 3 and 6",
+      "how": "Splits orders again and again by the column that best separates late from on-time orders.",
+      "settings": {
+        "Feature step": "SelectKBest(mutual_info_classif, k=15)",
+        "max_depth": "None",
+        "min_samples_split": "50",
+        "min_samples_leaf": "50",
+        "class_weight": "balanced",
+        "Tuning": "grid search, 90 settings"
+      },
+      "strengths": [
+        "Good ranking numbers: CV ROC-AUC 0.7754.",
+        "Tuning (at least 50 orders per leaf) cut the overfit gap from about 0.34 to about 0.03."
+      ],
+      "weaknesses": [
+        "The pipeline was picked using test scores.",
+        "Brier score not reported.",
+        "Fit gap 0.0263, close to the 0.03 limit.",
+        "Did not use the shared CV folds."
+      ],
+      "improve": [
+        "Rerun on the shared folds, choose on CV only, and score the test set once.",
+        "Use the same tuning budget as the other models."
+      ]
+    },
+    {
+      "key": "random_forest",
+      "rank": "8",
+      "rank_order": 8,
+      "name": "Random Forest",
+      "owner_id": "IT24102397",
+      "owner_name": "Ratnaweera D.U.A.",
+      "owner_short": "Ratnaweera",
+      "label": "Random Forest (Ratnaweera IT24102397)",
+      "score": 40.8,
+      "cv_roc": 0.7736,
+      "test_roc": 0.7787,
+      "test_pr": 0.8601,
+      "test_brier": null,
+      "cv_pr": 0.8557,
+      "fit_gap": 0.031,
+      "main_reason": "Gap 0.031, small grid, test set used",
+      "champion": false,
+      "status": {
+        "kind": "fail",
+        "flags": [
+          {
+            "level": "fail",
+            "text": "Fails ladder step 1: fit gap 0.0310"
+          },
+          {
+            "level": "warn",
+            "text": "Test set used for choices"
+          },
+          {
+            "level": "warn",
+            "text": "Brier score not reported"
+          }
+        ]
+      },
+      "served": false,
+      "family": "Trees and bagging",
+      "source": "IT24102397.md, sections 4 and 6",
+      "how": "Averages many decision trees, each grown on a different sample of the orders.",
+      "settings": {
+        "Columns": "all 54",
+        "n_estimators": "200",
+        "max_depth": "10",
+        "min_samples_split": "50",
+        "min_samples_leaf": "50",
+        "class_weight": "balanced",
+        "Tuning": "grid search, 24 settings"
+      },
+      "strengths": [
+        "Strong even untuned.",
+        "Highest test PR-AUC of the eight (0.8601)."
+      ],
+      "weaknesses": [
+        "Fails ladder step 1: fit gap 0.0310 is over the 0.03 limit.",
+        "Smallest grid (24) and every best setting sits at the edge of the range.",
+        "The test set was used for choices.",
+        "Brier score not reported."
+      ],
+      "improve": [
+        "Rerun on the shared folds with a wider search, including max_features.",
+        "Choose on CV only and score the test set once."
+      ]
+    }
+  ],
+  "headline": "Logistic Regression ranks first with 88.8 out of 100. Places 1 to 5 are a tie-break order, not a real performance gap, because all 8 models score almost the same and none beats the simple shipping-mode rule (CV ROC-AUC 0.7748).",
+  "glance_notes": [
+    "The gap is tiny. CV ROC-AUC runs only from 0.7693 to 0.7756. Test ROC-AUC runs from 0.7771 to 0.7797.",
+    "Lower PR-AUC for AdaBoost and XGBoost is a tie effect, not worse ranking.",
+    "Places 6 to 8 fall because of evidence and fit, not weak ranking power. Decision Tree and Random Forest can climb if Ratnaweera (IT24102397) reruns them on the shared folds."
+  ],
+  "how_we_ranked": "We used the group's own rules: choose by ranking quality (ROC-AUC and PR-AUC) on cross-validation, then break ties by stability, simplicity and cost, and touch the test set once. A 100-point scorecard turns those tie-breakers into an order: ranking power 25, fit health 15, probability honesty 15, fold stability 10, simplicity and speed 20, evidence quality 15.",
+  "scorecard_weights": {
+    "Ranking power": 25,
+    "Fit health": 15,
+    "Probability honesty": 15,
+    "Fold stability": 10,
+    "Simplicity and speed": 20,
+    "Evidence quality": 15
+  },
+  "theory": [
+    {
+      "label": "Theory",
+      "title": "why we rank on ranking quality",
+      "body": [
+        "The job is to put risky orders above safe ones. ROC-AUC is the chance that a random late order gets a higher risk score than a random on-time order. 0.5 is a coin flip and 1.0 is perfect. PR-AUC follows precision (how many flagged orders are truly late) as recall (how many late orders we catch) rises. Its no-skill value equals the late rate, 0.574.",
+        "Both measures look at the whole ranking, so they do not depend on one cut-off. Accuracy and F1 at 0.5 do depend on a cut-off, so the group does not use them to rank. Tied scores lower PR-AUC but not ROC-AUC, which makes ROC-AUC the safer guide here."
+      ]
+    },
+    {
+      "label": "Theory",
+      "title": "why time-ordered cross-validation",
+      "body": [
+        "Cross-validation tests a model several times on data it has not seen, then averages the results. Here the data is split in time order: train on the past, validate on the future. A gap of 448 orders stops near-identical neighbouring orders from leaking across the split. Averaging 5 folds reduces luck, and the spread between folds (SD) shows how stable a model is.",
+        "Models are chosen on CV only. The test set is a final exam. If it is used to choose, it is no longer independent and its score becomes too optimistic. This is why test-set reuse lowers a model's evidence score."
+      ]
+    },
+    {
+      "label": "Theory",
+      "title": "the tie zone and the data ceiling",
+      "body": [
+        "Each model's score moves a little between folds (SD about 0.001 to 0.003 for ROC-AUC, more for Naive Bayes). A difference smaller than that movement is luck, not skill. That is why the tie zone is plus or minus 0.005.",
+        "There is also a ceiling. Lateness is almost fully set by shipping mode and the Same Day noon cut-off. A simple rule already captures that, so no model can add much. This explains why eight different algorithms land on the same score."
+      ]
+    },
+    {
+      "label": "Theory",
+      "title": "overfitting, Brier score and calibration",
+      "body": [
+        "Overfitting means learning the noise of the training data. It shows up as a high training score and a lower unseen score. A negative or near-zero gap is healthy.",
+        "The Brier score is the average squared gap between the predicted probability and what happened (1 if late, 0 if on time). 0 is perfect and the no-skill value is 0.2445. Lower is better. It checks that \"70% late\" really means about 70%. Calibration fixes this when raw scores are off. Platt scaling fits a smooth S-curve and isotonic calibration fits a step function. Both are fitted on validation data, never on test."
+      ]
+    },
+    {
+      "label": "Theory",
+      "title": "what each scorecard column measures",
+      "body": [
+        "Ranking power (25): how well the model orders orders, the main goal. Fit health (15): is it learning real patterns, from the gap. Probability honesty (15): are its probabilities usable, from Brier. Fold stability (10): does it behave the same on every fold. Simplicity and speed (20): can people explain it and can it run quickly. Evidence quality (15): can we trust the numbers.",
+        "Evidence quality matters because of data snooping. Using the test set to choose, or giving one model a bigger tuning grid, gives it more chances to find a lucky result. A fair comparison uses the same folds, the same rules and a similar tuning effort for every model."
+      ]
+    },
+    {
+      "label": "Theory",
+      "title": "sensitivity analysis",
+      "body": [
+        "The scorecard weights are a judgement call. A fair test is to change them and see if the answer changes. If a model wins under every weight set, the result is solid. If it wins only under one, the result depends on the weights. Random weights (every mix equally likely) go further and show how often each model reaches each place."
+      ]
+    }
+  ],
+  "ladder": [
+    {
+      "step": 1,
+      "name": "Fit check",
+      "why": "A model that memorises its training data scores very high there and much lower on new data. The gap between the two (train minus unseen) measures this. Memorised patterns will not repeat on future orders. The group set 0.03 as the practical limit.",
+      "how": "Train PR-AUC minus CV (or test) PR-AUC. Out if above 0.03.",
+      "showed": "Random Forest 0.0310 is out. Decision Tree 0.0263 passes narrowly. The other six are within 0.003 of zero.",
+      "out": [
+        "random_forest"
+      ]
+    },
+    {
+      "step": 2,
+      "name": "Rule check",
+      "why": "Complexity must earn its place. If a model cannot beat a simple baseline, the simple baseline is the better choice. The margin of 0.005 is bigger than the normal fold-to-fold noise (0.001 to 0.003), so smaller differences are luck.",
+      "how": "CV ROC-AUC compared with the rule's 0.7748. Out if more than 0.005 below.",
+      "showed": "Naive Bayes (0.7693) is 0.0055 below and is out. Everyone else is inside the tie zone.",
+      "out": [
+        "naive_bayes"
+      ]
+    },
+    {
+      "step": 3,
+      "name": "Head-to-head",
+      "why": "Choose between models only when one is clearly better. PR-AUC can be distorted by tied scores, so a model must lose on both PR-AUC and ROC-AUC, by more than the noise margin, before it is removed.",
+      "how": "Check every pair on both measures with a 0.005 margin.",
+      "showed": "Nobody is clearly beaten. The models are statistically tied.",
+      "out": []
+    },
+    {
+      "step": 4,
+      "name": "Tie-break",
+      "why": "When performance is equal, prefer the simpler model (Occam's razor). It is easier to explain, more stable, cheaper to run and less likely to break on new data. Calibration is checked after selection.",
+      "how": "Score simplicity, stability, probability honesty and evidence quality.",
+      "showed": "Logistic Regression comes out first, but the order of the top five is close.",
+      "out": []
+    }
+  ],
+  "method": [
+    {
+      "key": "ladder",
+      "title": "Decision ladder",
+      "theory": null,
+      "formula": "step 1  fit check     out if train PR-AUC - unseen PR-AUC > 0.03\nstep 2  rule check    out if CV ROC-AUC < 0.7748 - 0.005\nstep 3  head-to-head  out only if worse on BOTH ROC and PR by > 0.005\nstep 4  tie-break     scorecard: simplicity, stability, honesty, evidence"
+    },
+    {
+      "key": "cv",
+      "title": "Time-ordered CV",
+      "theory": "why time-ordered cross-validation",
+      "showed": [
+        "All eight models were scored on the same five time-ordered folds, with a gap of 448 orders.",
+        "Decision Tree and Random Forest used their own folds and the test set to choose, which lowers their evidence score."
+      ],
+      "why": [
+        "Cross-validation tests a model several times on data it has not seen, then averages the results. Here the data is split in time order: train on the past, validate on the future. A gap of 448 orders stops near-identical neighbouring orders from leaking across the split. Averaging 5 folds reduces luck, and the spread between folds (SD) shows how stable a model is.",
+        "Models are chosen on CV only. The test set is a final exam. If it is used to choose, it is no longer independent and its score becomes too optimistic. This is why test-set reuse lowers a model's evidence score."
+      ],
+      "why_title": "why time-ordered cross-validation",
+      "formula": "for fold in 1..5:\n    fit on orders before the fold\n    skip 448 orders (about 7 days)\n    score the next 7,415 orders\nCV score = mean of the 5 fold scores"
+    },
+    {
+      "key": "metrics",
+      "title": "ROC-AUC vs PR-AUC and ties",
+      "theory": "why we rank on ranking quality",
+      "extra_theory": "the tie zone and the data ceiling",
+      "showed": [
+        "AdaBoost and XGBoost score 0.8018 PR-AUC, but so does the rule when ties count against it. With ties broken fairly the rule scores 0.8562.",
+        "All models sit inside a 0.006 band of CV ROC-AUC. Only Naive Bayes is outside the tie zone."
+      ],
+      "why": [
+        "The job is to put risky orders above safe ones. ROC-AUC is the chance that a random late order gets a higher risk score than a random on-time order. 0.5 is a coin flip and 1.0 is perfect. PR-AUC follows precision (how many flagged orders are truly late) as recall (how many late orders we catch) rises. Its no-skill value equals the late rate, 0.574.",
+        "Both measures look at the whole ranking, so they do not depend on one cut-off. Accuracy and F1 at 0.5 do depend on a cut-off, so the group does not use them to rank. Tied scores lower PR-AUC but not ROC-AUC, which makes ROC-AUC the safer guide here.",
+        "Each model's score moves a little between folds (SD about 0.001 to 0.003 for ROC-AUC, more for Naive Bayes). A difference smaller than that movement is luck, not skill. That is why the tie zone is plus or minus 0.005.",
+        "There is also a ceiling. Lateness is almost fully set by shipping mode and the Same Day noon cut-off. A simple rule already captures that, so no model can add much. This explains why eight different algorithms land on the same score."
+      ],
+      "why_title": "why we rank on ranking quality",
+      "formula": "ROC-AUC = P(score of a random late order > score of a random on-time order)\nPR-AUC  = area under precision vs recall (late class)\nno skill: ROC-AUC 0.5, PR-AUC = late rate (0.574)"
+    },
+    {
+      "key": "brier",
+      "title": "Brier and calibration",
+      "theory": "overfitting, Brier score and calibration",
+      "showed": [
+        "Five models land within 0.0003 of the rule's Brier score of 0.1733. Naive Bayes is worse at 0.1763.",
+        "Decision Tree and Random Forest did not report Brier."
+      ],
+      "why": [
+        "Overfitting means learning the noise of the training data. It shows up as a high training score and a lower unseen score. A negative or near-zero gap is healthy.",
+        "The Brier score is the average squared gap between the predicted probability and what happened (1 if late, 0 if on time). 0 is perfect and the no-skill value is 0.2445. Lower is better. It checks that \"70% late\" really means about 70%. Calibration fixes this when raw scores are off. Platt scaling fits a smooth S-curve and isotonic calibration fits a step function. Both are fitted on validation data, never on test."
+      ],
+      "why_title": "overfitting, Brier score and calibration",
+      "formula": "Brier = mean( (p - y)^2 )      y = 1 if late, 0 if on time\nperfect = 0, no skill = 0.2445, lower is better"
+    },
+    {
+      "key": "scorecard",
+      "title": "The scorecard",
+      "theory": "what each scorecard column measures",
+      "showed_from": "rank_reasons",
+      "why": [
+        "Ranking power (25): how well the model orders orders, the main goal. Fit health (15): is it learning real patterns, from the gap. Probability honesty (15): are its probabilities usable, from Brier. Fold stability (10): does it behave the same on every fold. Simplicity and speed (20): can people explain it and can it run quickly. Evidence quality (15): can we trust the numbers.",
+        "Evidence quality matters because of data snooping. Using the test set to choose, or giving one model a bigger tuning grid, gives it more chances to find a lucky result. A fair comparison uses the same folds, the same rules and a similar tuning effort for every model."
+      ],
+      "why_title": "what each scorecard column measures",
+      "showed": [
+        "Logistic Regression (1): no weak cell, easiest to explain through odds ratios, clean protocol.",
+        "AdaBoost and XGBoost (2=): match the rule exactly, best fit gaps (-0.0025), but heavier than a one-line rule and add no value.",
+        "Linear SVM (4): strong numbers and very fast (0.03 s), but needs a calibration step.",
+        "KNN (5): full marks on ranking, but 9.6 s per 7,415 orders and it stores all training data.",
+        "Naive Bayes (6): fails ladder step 2, poor probabilities, widest fold spread.",
+        "Decision Tree (7): good numbers, but the pipeline was picked using test scores and Brier is missing.",
+        "Random Forest (8): fails step 1, smallest grid (24), edge settings, test set used for choices."
+      ],
+      "formula": "total = ranking power (25) + fit health (15) + probability honesty (15)\n      + fold stability (10) + simplicity and speed (20) + evidence quality (15)"
+    },
+    {
+      "key": "sensitivity",
+      "title": "Sensitivity test",
+      "theory": "sensitivity analysis",
+      "showed_from": "sensitivity_text",
+      "why": [
+        "The scorecard weights are a judgement call. A fair test is to change them and see if the answer changes. If a model wins under every weight set, the result is solid. If it wins only under one, the result depends on the weights. Random weights (every mix equally likely) go further and show how often each model reaches each place."
+      ],
+      "why_title": "sensitivity analysis",
+      "showed": [
+        "We re-ranked under six weight sets and 4,000 random ones. The same five models fill places 1 to 5 in all six sets (about 95% of random tests). Logistic Regression and KNN each finish first in 44% of random tests, so that choice depends on values: simple and fast, or highest raw numbers. Random Forest finishes last in 88%."
+      ],
+      "formula": "repeat 4,000 times:\n    draw six random weights (every mix equally likely)\n    re-rank the eight models\ncount how often each model reaches each place"
+    }
+  ],
+  "ranking_power_text": [
+    "All models sit inside a 0.006 band. Only Naive Bayes is clearly outside the rule's tie zone (rule plus or minus 0.005). KNN has the highest dot, but its lead of 0.0008 is noise."
+  ],
+  "fit_text": [
+    "A gap near zero means the model learned real patterns. Random Forest (0.0310) is over the 0.03 limit and Decision Tree (0.0263) is close. Brier score checks honest probabilities (lower is better). Five models land within 0.0003 of the rule's 0.1733. Naive Bayes is worse at 0.1763. Decision Tree and Random Forest did not report Brier."
+  ],
+  "fit_gap_note": "Decision Tree and Random Forest use train minus test (no CV gap reported). Others use train minus CV.",
+  "rank_reasons": [
+    "Logistic Regression (1): no weak cell, easiest to explain through odds ratios, clean protocol.",
+    "AdaBoost and XGBoost (2=): match the rule exactly, best fit gaps (-0.0025), but heavier than a one-line rule and add no value.",
+    "Linear SVM (4): strong numbers and very fast (0.03 s), but needs a calibration step.",
+    "KNN (5): full marks on ranking, but 9.6 s per 7,415 orders and it stores all training data.",
+    "Naive Bayes (6): fails ladder step 2, poor probabilities, widest fold spread.",
+    "Decision Tree (7): good numbers, but the pipeline was picked using test scores and Brier is missing.",
+    "Random Forest (8): fails step 1, smallest grid (24), edge settings, test set used for choices."
+  ],
+  "sensitivity_text": [
+    "We re-ranked under six weight sets and 4,000 random ones. The same five models fill places 1 to 5 in all six sets (about 95% of random tests). Logistic Regression and KNN each finish first in 44% of random tests, so that choice depends on values: simple and fast, or highest raw numbers. Random Forest finishes last in 88%."
+  ],
+  "fixes": [
+    "Show ROC-AUC next to PR-AUC on the leaderboard.",
+    "Rerun Ratnaweera's (IT24102397) models on the shared folds, choose on CV only, and score the test set once. State that Ratnaweera used the test set 12 times and Maheepala (IT24102901) twice.",
+    "Use equal tuning budgets (now 20 to 96 settings) and one champion cut-off.",
+    "State clearly that no model beats the simple rule."
+  ],
+  "report_wording": "All eight models were compared on the shared pipeline and the same five time-ordered folds. Differences between the models were smaller than the noise between folds, and none beat the simple shipping-mode rule by more than 0.005. We therefore ranked them by the group's tiebreakers: fit health, probability quality, stability, simplicity and evidence quality. Logistic Regression ranked first because it matches the best ranking numbers while being the simplest to explain. The lower PR-AUC of AdaBoost and XGBoost comes only from tied scores, so we judged them by ROC-AUC.",
+  "data_limits": [
+    {
+      "title": "A ceiling of about 0.775 ROC-AUC",
+      "body": "Lateness is almost fully set by the shipping mode and the Same Day noon cut-off. A simple rule already captures that, so eight different algorithms land on the same score."
+    },
+    {
+      "title": "Inside two shipping modes it is a coin flip",
+      "body": "About 40% of Standard Class and 80% of Second Class orders are late, and nothing known at order time says which ones. Within-group ROC-AUC is about 0.50."
+    },
+    {
+      "title": "Only order-time information",
+      "body": "The models never see real shipping days, warehouse workload, carrier, distance or weather. Only new information like that could raise the ceiling."
+    },
+    {
+      "title": "The served champion is a local retrain",
+      "body": "Madushani's original model file was not provided, so this app retrains Logistic Regression from her reported settings on pipeline v1.0 rebuilt from dataset.zip. Every reported number and coefficient was reproduced exactly."
+    },
+    {
+      "title": "Seven models are documentation only",
+      "body": "Their saved files were not provided, so Predict uses only the champion. Their numbers come from the group's results table."
+    }
+  ],
+  "figures": {
+    "scorecard_heatmap": {
+      "src": "/figures/scorecard-heatmap.png",
+      "caption": "Figure 6. Scorecard heatmap. Green = full marks, red = none.",
+      "source": "Model_Comparison_Summary.docx, Figure 6",
+      "alt": "Scorecard heatmap. Totals out of 100: Logistic Regression 88.8, AdaBoost 86.7, XGBoost 86.7, Linear SVM 86.6, KNN 85.0, Naive Bayes 58.9, Decision Tree 58.2, Random Forest 40.8. Columns: ranking power /25, fit health /15, probability honesty /15, fold stability /10, simplicity and speed /20, evidence quality /15."
+    },
+    "rank_robustness": {
+      "src": "/figures/rank-robustness.png",
+      "caption": "Figure 7. How often each model reaches each place when the weights change at random.",
+      "source": "Model_Comparison_Summary.docx, Figure 7",
+      "alt": "Heatmap of the rank each model reaches over 4,000 random weight sets. Logistic Regression and KNN each finish first in 44% of tests. Places 1 to 5 swap often; Random Forest finishes last in 88%."
+    }
+  },
+  "cite": "Madushani G.R. (IT24102928), Ranthisaru T.K.K. (IT24102255), Ratnaweera D.U.A. (IT24102397) and Maheepala S.A.D.A.O. (IT24102901). 2026. Late delivery risk on the DataCo supply chain dataset. IT3091 Machine Learning, Group 2026-DS-15, Sri Lanka Institute of Information Technology.",
+  "dataset": {
+    "name": "DataCo SMART SUPPLY CHAIN FOR BIG DATA ANALYSIS",
+    "source": "Mendeley Data, version 4",
+    "authors": "Fabian Constante, Fernando Silva and António Pereira",
+    "published": "2019-03-12",
+    "doi": "10.17632/8gx2fvg2k6.4",
+    "licence": "CC BY 4.0",
+    "cite": "Constante, F., Silva, F. and Pereira, A. (2019). DataCo SMART SUPPLY CHAIN FOR BIG DATA ANALYSIS. Mendeley Data, V4. https://doi.org/10.17632/8gx2fvg2k6.4",
+    "url": "https://data.mendeley.com/datasets/8gx2fvg2k6/4",
+    "sha256": "fa6d022ed437155e1a2f0378710602848703c8a7f203f7ff5d77805bf8480aa6"
+  }
+}

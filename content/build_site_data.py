@@ -380,6 +380,7 @@ def main():
     OUT.write_text(json.dumps(data, indent=2, ensure_ascii=False) + '\n')
     WEB_COPY.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy(OUT, WEB_COPY)
+    shutil.copy(OUT, WEBAPP / 'api' / 'app' / 'site_data.json')   # deployed with the api service on Vercel
     print(f'Wrote {OUT} and {WEB_COPY}: {len(models)} models, {len(theory)} theory boxes, {len(method)} method tabs. '
           'Docx ranking table matches the results table.')
 

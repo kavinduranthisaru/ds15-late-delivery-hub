@@ -19,7 +19,9 @@ from .paths import STORE, WEBAPP
 from .registry import CHAMPION, CHAMPION_CUTOFF, TIER_CUTS, registry
 from .schemas import REFERENCE, Order, Prediction, PredictAllRequest, PredictRequest
 
-SITE = json.loads(Path(os.environ.get('DS15_SITE_DATA', WEBAPP / 'content' / 'site_data.json')).read_text())
+# On Vercel only the api/ folder is deployed, so a copy of site_data.json is kept next to this file.
+_SITE_PATHS = [os.environ.get('DS15_SITE_DATA'), WEBAPP / 'content' / 'site_data.json', Path(__file__).parent / 'site_data.json']
+SITE = json.loads(next(Path(p) for p in _SITE_PATHS if p and Path(p).exists()).read_text())
 MODELS = {m['key']: m for m in SITE['models']}
 EXAMPLES_PATH = Path(__file__).parent / 'examples.json'
 
@@ -31,6 +33,17 @@ async def lifespan(_app):
 
 
 app = FastAPI(title='DS-15 late delivery risk API', version='1.0', lifespan=lifespan)
+
+
+@app.middleware('http')
+async def strip_api_prefix(request, call_next):
+    """The API is public under /api (Vercel rewrite /api/(.*), Vite proxy in dev). Routes are defined without the
+    prefix, so /api/health and /health both work, locally and on Vercel."""
+    path = request.scope['path']
+    if path == '/api' or path.startswith('/api/'):
+        request.scope['path'] = path[4:] or '/'
+    return await call_next(request)
+
 app.add_middleware(CORSMiddleware, allow_origins=['http://localhost:5173', 'http://127.0.0.1:5173',
                                                   'http://localhost:4173', 'http://127.0.0.1:4173'],
                    allow_methods=['GET', 'POST'], allow_headers=['*'])

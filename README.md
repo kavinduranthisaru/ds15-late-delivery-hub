@@ -26,7 +26,7 @@ Also in this repo:
 ```bash
 # Python 3.13 environment, kept outside OneDrive
 python3 -m venv ~/.ds15/venv
-~/.ds15/venv/bin/pip install -r api/requirements.txt
+~/.ds15/venv/bin/pip install -r api/requirements-dev.txt
 
 # Front end
 cd web && npm install && cd ..
@@ -103,17 +103,24 @@ Inputs are checked with Pydantic:
 
 Values outside the training range still get a prediction, with a warning.
 
-## Deploy (Vercel)
+## Deploy (Vercel, two services)
 
-1. On vercel.com, choose **Add New → Project** and import this GitHub repo.
-2. Leave **Root Directory** as the repo root. `vercel.json` already sets the build:
-   - install `cd web && npm ci`
-   - build `cd web && npm run build`
-   - output `web/dist`
-   - every page route rewrites to `index.html`, so deep links like `/models/knn` work
-3. Press **Deploy**. Every push to `main` redeploys.
+`vercel.json` deploys one Vercel project with two services and one domain:
 
-There are no environment variables, secrets or database. To share a preview before going public, use the deployment URL Vercel shows. For a private group link, turn on Vercel's **Deployment Protection**.
+| Service | Folder | Public path | What it is |
+|---|---|---|---|
+| `web` | `web/` | `/` (everything else) | The static Vite app. Predict runs the champion in the browser, so the site works even if the API is down. |
+| `api` | `api/` | `/api/*` | FastAPI with the joblib champion: `/api/health`, `/api/models`, `/api/predict`, `/api/predict/all`, `/api/examples`. |
+
+- **Bindings:** none. Neither service calls the other. The web app never calls the API, and the API never calls the web app.
+- **API paths:** routes are written without `/api`. A small middleware removes the prefix, so `/api/health` (Vercel) and `/health` (local) both work.
+- **What the api service ships:** `api/requirements.txt` holds only the runtime dependencies. `api/.vercelignore` leaves out the tests, scripts and the rebuilt pipeline. The API reads `api/app/site_data.json`, which `content/build_site_data.py` keeps in sync.
+
+Steps:
+1. On vercel.com, choose **Add New → Project**, import this repo and keep the root directory as the repo root.
+2. Deploy. Test locally first with `vercel dev`, which runs both services together.
+
+**Size warning:** scikit-learn, SciPy, NumPy and pandas together are about 250 MB. That is close to Vercel's size limit for Python functions. If the api service fails to deploy for that reason, remove the `api` service and its rewrite. The web app needs nothing from it.
 
 ## Known limits
 
