@@ -1,0 +1,62 @@
+{
+  "scheme": "TimeSeriesSplit(n_splits=5, gap=448)",
+  "indexes_into": "train_orders.parquet (row order as saved)",
+  "note": "Ranges are [start, end) positions; build with np.arange(start, end)",
+  "folds": [
+    {
+      "fold": 0,
+      "train": [
+        0,
+        6969
+      ],
+      "val": [
+        7417,
+        14832
+      ]
+    },
+    {
+      "fold": 1,
+      "train": [
+        0,
+        14384
+      ],
+      "val": [
+        14832,
+        22247
+      ]
+    },
+    {
+      "fold": 2,
+      "train": [
+        0,
+        21799
+      ],
+      "val": [
+        22247,
+        29662
+      ]
+    },
+    {
+      "fold": 3,
+      "train": [
+        0,
+        29214
+      ],
+      "val": [
+        29662,
+        37077
+      ]
+    },
+    {
+      "fold": 4,
+      "train": [
+        0,
+        36629
+      ],
+      "val": [
+        37077,
+        44492
+      ]
+    }
+  ]
+}

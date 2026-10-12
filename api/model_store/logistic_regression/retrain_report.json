@@ -1,0 +1,110 @@
+{
+  "solver": "lbfgs",
+  "scikit-learn": "1.6.1",
+  "checks": [
+    {
+      "check": "cv_pr",
+      "retrained": 0.8564,
+      "reported": 0.8564,
+      "match": 1.0
+    },
+    {
+      "check": "cv_roc",
+      "retrained": 0.7743,
+      "reported": 0.7743,
+      "match": 1.0
+    },
+    {
+      "check": "train_pr",
+      "retrained": 0.8583,
+      "reported": 0.8583,
+      "match": 1.0
+    },
+    {
+      "check": "train_roc",
+      "retrained": 0.7792,
+      "reported": 0.7792,
+      "match": 1.0
+    },
+    {
+      "check": "test_pr",
+      "retrained": 0.8593,
+      "reported": 0.8593,
+      "match": 1.0
+    },
+    {
+      "check": "test_roc",
+      "retrained": 0.7793,
+      "reported": 0.7793,
+      "match": 1.0
+    },
+    {
+      "check": "test_brier",
+      "retrained": 0.1735,
+      "reported": 0.1735,
+      "match": 1.0
+    },
+    {
+      "check": "test_logloss",
+      "retrained": 0.5013,
+      "reported": 0.5013,
+      "match": true
+    },
+    {
+      "check": "test_flag_rate",
+      "retrained": 0.379,
+      "reported": 0.379,
+      "match": true
+    },
+    {
+      "check": "val_flag_rate",
+      "retrained": 0.3655,
+      "reported": 0.3655,
+      "match": true
+    },
+    {
+      "check": "intercept",
+      "retrained": 0.754,
+      "reported": 0.754,
+      "match": true
+    },
+    {
+      "check": "coef same_day_after_cutoff",
+      "retrained": 5.5161,
+      "reported": 5.5161,
+      "match": 1.0
+    },
+    {
+      "check": "coef shipping_mode_First Class",
+      "retrained": 4.3032,
+      "reported": 4.3032,
+      "match": 1.0
+    },
+    {
+      "check": "coef shipping_mode_Same Day",
+      "retrained": -3.3487,
+      "reported": -3.3487,
+      "match": 1.0
+    },
+    {
+      "check": "coef shipping_mode_Standard Class",
+      "retrained": -1.1893,
+      "reported": -1.1893,
+      "match": 1.0
+    },
+    {
+      "check": "coef shipping_mode_Second Class",
+      "retrained": 0.5988,
+      "reported": 0.5988,
+      "match": 1.0
+    },
+    {
+      "check": "coef order_region_Canada",
+      "retrained": -0.2484,
+      "reported": -0.2484,
+      "match": 1.0
+    }
+  ],
+  "selected_columns_match": true,
+  "mismatches": []
+}

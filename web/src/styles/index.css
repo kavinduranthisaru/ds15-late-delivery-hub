@@ -1,0 +1,149 @@
+@import 'tailwindcss';
+@import '@fontsource/plus-jakarta-sans/400.css';
+@import '@fontsource/plus-jakarta-sans/500.css';
+@import '@fontsource/plus-jakarta-sans/600.css';
+@import '@fontsource/plus-jakarta-sans/700.css';
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+/* ---- Design tokens (from the HR Hub and K&Z references) --------------------------------------- */
+:root {
+  --canvas: #f2f2f2;
+  --app: #f6f6f7;
+  --surface: #ffffff;
+  --surface-2: #f2f2f2;
+  --surface-3: #e9e9ec;
+  --ink: #131313;
+  --title: #1b1f4b;
+  --ink-2: #4a4a4f;
+  --muted: #6e6e74;
+  --line: #e7e7ea;
+  --line-2: #d9d9de;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.04), 0 1px 1px rgb(0 0 0 / 0.02);
+  --shadow-lg: 0 12px 32px rgb(0 0 0 / 0.08);
+
+  --green: #a9e9af;            /* active pills, badges, champion */
+  --on-green: #131313;
+  --primary-bg: #131313;       /* the "Add Document" button */
+  --primary-fg: #a9e9af;
+
+  --mint-bg: #dff9f0;  --mint-fg: #11643f;
+  --pink-bg: #f6e6e6;  --pink-fg: #a3222b;  --pink-card: #fbeaea;  --pink-line: #f1b9be;
+  --peach-bg: #fdeadb; --peach-fg: #9a4a07; --peach-card: #fff3ea; --peach-line: #f6cba9;
+  --blue-bg: #e5eefb;  --blue-fg: #244c8f;
+  --grey-bg: #ececef;  --grey-fg: #3f3f45;
+  --champ-card: #eef9ef; --champ-line: #bfe8c4;
+  --danger: #d93a40;   --warn: #c26a00;  --ok: #1f8a4c;
+
+  /* one fixed colour per team member, used the same way everywhere */
+  --m-madushani: #22804a;
+  --m-ranthisaru: #3b6fd8;
+  --m-ratnaweera: #c2364f;
+  --m-maheepala: #a85c0e;
+  --rule-model: #4a4a4f;
+  --grid: #ececef;
+
+  --font: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --r-card: 22px;
+  --r-pill: 999px;
+  --dur: 180ms;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --canvas: #0e0e0f;
+  --app: #141416;
+  --surface: #1c1c1f;
+  --surface-2: #26262a;
+  --surface-3: #303035;
+  --ink: #f2f2f2;
+  --title: #e8eaff;
+  --ink-2: #c4c4c9;
+  --muted: #9a9aa0;
+  --line: #2c2c31;
+  --line-2: #3a3a40;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 12px 32px rgb(0 0 0 / 0.5);
+
+  --primary-bg: #a9e9af;
+  --primary-fg: #131313;
+
+  --mint-bg: #123227;  --mint-fg: #8fe3b9;
+  --pink-bg: #3a1f22;  --pink-fg: #f4a3aa;  --pink-card: #261819;  --pink-line: #5e2b31;
+  --peach-bg: #3a2a1c; --peach-fg: #f5b98a; --peach-card: #251d16; --peach-line: #5c4026;
+  --blue-bg: #1a2740;  --blue-fg: #9dbdf5;
+  --grey-bg: #2a2a2e;  --grey-fg: #c4c4c9;
+  --champ-card: #14231a; --champ-line: #2e5a36;
+  --danger: #ff6b70;   --warn: #ffb347;  --ok: #6fd39a;
+
+  --m-madushani: #6fd39a;
+  --m-ranthisaru: #8db0f5;
+  --m-ratnaweera: #f28ca0;
+  --m-maheepala: #f0b061;
+  --rule-model: #c4c4c9;
+  --grid: #2c2c31;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-app: var(--app);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-ink: var(--ink);
+  --color-title: var(--title);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-green: var(--green);
+  --color-on-green: var(--on-green);
+  --color-primary: var(--primary-bg);
+  --color-on-primary: var(--primary-fg);
+  --color-danger: var(--danger);
+  --color-warn: var(--warn);
+  --color-ok: var(--ok);
+  --font-sans: var(--font);
+  --radius-card: var(--r-card);
+}
+
+@layer base {
+  html, body, #root { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: 'tnum' 1;
+  }
+  h1, h2, h3, h4 { margin: 0; font-weight: 700; letter-spacing: -0.01em; }
+  p { margin: 0; }
+  a { color: inherit; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 10px; }
+  ::selection { background: var(--green); color: var(--on-green); }
+  .tnum { font-variant-numeric: tabular-nums; }
+  .label { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+}
+
+/* Thin scrollbars for the few inner panels that scroll */
+.scroll-y { overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--line-2) transparent; }
+.scroll-x { overflow-x: auto; scrollbar-width: none; }
+.scroll-x::-webkit-scrollbar { display: none; }
+
+/* ---- Motion ----------------------------------------------------------------------------------- */
+@keyframes fade-up { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes sheet-in { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes shimmer { 0% { background-position: -200px 0; } 100% { background-position: 200px 0; } }
+.page-enter { animation: fade-up var(--dur) var(--ease) both; }
+.tab-enter { animation: fade 150ms var(--ease) both; }
+.skeleton { background: linear-gradient(90deg, var(--surface-2), var(--surface-3), var(--surface-2)); background-size: 400px 100%; animation: shimmer 1.2s linear infinite; border-radius: 10px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}

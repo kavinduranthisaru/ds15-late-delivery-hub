@@ -1,0 +1,176 @@
+{
+  "pipeline_version": "v1.0",
+  "source": "rebuilt by app from dataset.zip with Notebook 02 code (not the teammate file)",
+  "created_at": "2026-10-12T18:48:12",
+  "seed": 42,
+  "raw_file": {
+    "name": "DataCoSupplyChainDataset.csv",
+    "sha256": "fa6d022ed437155e1a2f0378710602848703c8a7f203f7ff5d77805bf8480aa6"
+  },
+  "target": "Late_delivery_risk",
+  "positive_class": "1 = late",
+  "split": {
+    "train": "order_date < 2017-03-25",
+    "validation": "2017-04-01 <= order_date < 2017-06-24",
+    "test": "order_date >= 2017-07-01",
+    "purge_days": 7,
+    "sizes": {
+      "train": 44492,
+      "validation": 4564,
+      "test": 13071
+    },
+    "late_rate": {
+      "train": 0.5734,
+      "validation": 0.5635,
+      "test": 0.5756
+    }
+  },
+  "features_input": {
+    "categorical": [
+      "shipping_mode",
+      "market",
+      "order_region",
+      "customer_segment",
+      "payment_type"
+    ],
+    "numeric": [
+      "n_lines",
+      "total_qty",
+      "gross_sales",
+      "total_discount",
+      "discount_rate",
+      "max_unit_price"
+    ],
+    "cyclical": [
+      "hour_sin",
+      "hour_cos",
+      "dow_sin",
+      "dow_cos",
+      "month_sin",
+      "month_cos"
+    ],
+    "binary": [
+      "is_after_noon",
+      "is_weekend",
+      "same_day_after_cutoff"
+    ]
+  },
+  "features_model_ready": [
+    "n_lines",
+    "gross_sales",
+    "discount_rate",
+    "max_unit_price",
+    "hour_sin",
+    "hour_cos",
+    "dow_sin",
+    "dow_cos",
+    "month_sin",
+    "month_cos",
+    "total_qty",
+    "total_discount",
+    "shipping_mode_First Class",
+    "shipping_mode_Same Day",
+    "shipping_mode_Second Class",
+    "shipping_mode_Standard Class",
+    "market_Africa",
+    "market_Europe",
+    "market_LATAM",
+    "market_Pacific Asia",
+    "market_USCA",
+    "order_region_Canada",
+    "order_region_Caribbean",
+    "order_region_Central Africa",
+    "order_region_Central America",
+    "order_region_Central Asia",
+    "order_region_East Africa",
+    "order_region_East of USA",
+    "order_region_Eastern Asia",
+    "order_region_Eastern Europe",
+    "order_region_North Africa",
+    "order_region_Northern Europe",
+    "order_region_Oceania",
+    "order_region_South America",
+    "order_region_South Asia",
+    "order_region_South of USA",
+    "order_region_Southeast Asia",
+    "order_region_Southern Africa",
+    "order_region_Southern Europe",
+    "order_region_US Center",
+    "order_region_West Africa",
+    "order_region_West Asia",
+    "order_region_West of USA",
+    "order_region_Western Europe",
+    "customer_segment_Consumer",
+    "customer_segment_Corporate",
+    "customer_segment_Home Office",
+    "payment_type_CASH",
+    "payment_type_DEBIT",
+    "payment_type_PAYMENT",
+    "payment_type_TRANSFER",
+    "is_after_noon",
+    "is_weekend",
+    "same_day_after_cutoff"
+  ],
+  "imputation": {
+    "mean": [
+      "n_lines",
+      "gross_sales",
+      "discount_rate",
+      "max_unit_price",
+      "hour_sin",
+      "hour_cos",
+      "dow_sin",
+      "dow_cos",
+      "month_sin",
+      "month_cos"
+    ],
+    "median": [
+      "total_qty",
+      "total_discount"
+    ],
+    "mode": [
+      "shipping_mode",
+      "market",
+      "order_region",
+      "customer_segment",
+      "payment_type",
+      "is_after_noon",
+      "is_weekend",
+      "same_day_after_cutoff"
+    ],
+    "constant_unknown": [],
+    "constant_zero": []
+  },
+  "encoding": {
+    "type": "OneHotEncoder",
+    "min_frequency": 50,
+    "handle_unknown": "infrequent_if_exist"
+  },
+  "scaling": {
+    "type": "StandardScaler",
+    "columns": [
+      "n_lines",
+      "gross_sales",
+      "discount_rate",
+      "max_unit_price",
+      "hour_sin",
+      "hour_cos",
+      "dow_sin",
+      "dow_cos",
+      "month_sin",
+      "month_cos",
+      "total_qty",
+      "total_discount"
+    ]
+  },
+  "cv": {
+    "n_splits": 5,
+    "gap_orders": 448,
+    "min_gap_days": 8.1
+  },
+  "versions": {
+    "scikit-learn": "1.6.1",
+    "pandas": "2.2.3",
+    "numpy": "2.1.3"
+  }
+}

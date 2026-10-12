@@ -1,0 +1,65 @@
+[
+  {
+    "key": "low",
+    "title": "Low risk",
+    "why": "Same Day order placed in the morning, before the noon cut-off.",
+    "order_id": 76115,
+    "actual_late": 0,
+    "champion_probability": 0.0705,
+    "order": {
+      "order_date": "2018-01-16T02:07",
+      "shipping_mode": "Same Day",
+      "market": "Pacific Asia",
+      "order_region": "Southeast Asia",
+      "customer_segment": "Corporate",
+      "payment_type": "CASH",
+      "n_lines": 1,
+      "total_qty": 1,
+      "gross_sales": 11.54,
+      "total_discount": 2.31,
+      "max_unit_price": 11.54
+    }
+  },
+  {
+    "key": "mixed",
+    "title": "Mixed",
+    "why": "Standard Class order. About 4 in 10 of these were late, so the model is unsure.",
+    "order_id": 74143,
+    "actual_late": 0,
+    "champion_probability": 0.4021,
+    "order": {
+      "order_date": "2017-12-18T07:14",
+      "shipping_mode": "Standard Class",
+      "market": "Pacific Asia",
+      "order_region": "Eastern Asia",
+      "customer_segment": "Consumer",
+      "payment_type": "DEBIT",
+      "n_lines": 1,
+      "total_qty": 1,
+      "gross_sales": 59.08,
+      "total_discount": 5.32,
+      "max_unit_price": 59.08
+    }
+  },
+  {
+    "key": "high",
+    "title": "High risk",
+    "why": "Same Day order placed in the afternoon, after the noon cut-off.",
+    "order_id": 74041,
+    "actual_late": 1,
+    "champion_probability": 0.9514,
+    "order": {
+      "order_date": "2017-12-16T19:30",
+      "shipping_mode": "Same Day",
+      "market": "Pacific Asia",
+      "order_region": "Eastern Asia",
+      "customer_segment": "Home Office",
+      "payment_type": "TRANSFER",
+      "n_lines": 1,
+      "total_qty": 1,
+      "gross_sales": 31.08,
+      "total_discount": 0.31,
+      "max_unit_price": 31.08
+    }
+  }
+]

@@ -1,0 +1,163 @@
+{
+ "model": "Logistic Regression",
+ "owner": "Madushani G.R.",
+ "owner_id": "IT24102928",
+ "provenance": "retrained by this app from the reported settings (original file not provided)",
+ "cutoff": 0.604,
+ "tiers": {
+  "Medium": 0.6,
+  "High": 0.9
+ },
+ "intercept": 0.7544336607069123,
+ "terms": [
+  {
+   "name": "hour_sin",
+   "kind": "num",
+   "feature": "hour_sin",
+   "mean": 0.0008703582126650891,
+   "scale": 0.7074381511893153,
+   "fill": 0.0008703582126650891,
+   "coef": 0.006711788708721153
+  },
+  {
+   "name": "hour_cos",
+   "kind": "num",
+   "feature": "hour_cos",
+   "mean": 0.0013833835348148755,
+   "scale": 0.7067733660576215,
+   "fill": 0.0013833835348148755,
+   "coef": -0.004028215403648325
+  },
+  {
+   "name": "dow_sin",
+   "kind": "num",
+   "feature": "dow_sin",
+   "mean": -0.0013776759612768238,
+   "scale": 0.7065976015575877,
+   "fill": -0.0013776759612768238,
+   "coef": -0.0015761661434334272
+  },
+  {
+   "name": "dow_cos",
+   "kind": "num",
+   "feature": "dow_cos",
+   "mean": -0.004997067089753752,
+   "scale": 0.7075966088121896,
+   "fill": -0.004997067089753752,
+   "coef": 0.01933505240909588
+  },
+  {
+   "name": "shipping_mode_First Class",
+   "kind": "onehot",
+   "feature": "shipping_mode",
+   "category": "First Class",
+   "coef": 4.303224350438974
+  },
+  {
+   "name": "shipping_mode_Same Day",
+   "kind": "onehot",
+   "feature": "shipping_mode",
+   "category": "Same Day",
+   "coef": -3.3487385969920815
+  },
+  {
+   "name": "shipping_mode_Second Class",
+   "kind": "onehot",
+   "feature": "shipping_mode",
+   "category": "Second Class",
+   "coef": 0.5987850984584946
+  },
+  {
+   "name": "shipping_mode_Standard Class",
+   "kind": "onehot",
+   "feature": "shipping_mode",
+   "category": "Standard Class",
+   "coef": -1.1893138708566149
+  },
+  {
+   "name": "market_Africa",
+   "kind": "onehot",
+   "feature": "market",
+   "category": "Africa",
+   "coef": -0.0007766083415870573
+  },
+  {
+   "name": "order_region_Canada",
+   "kind": "onehot",
+   "feature": "order_region",
+   "category": "Canada",
+   "coef": -0.2484465364314072
+  },
+  {
+   "name": "order_region_Caribbean",
+   "kind": "onehot",
+   "feature": "order_region",
+   "category": "Caribbean",
+   "coef": -0.061247092243695636
+  },
+  {
+   "name": "order_region_Central Africa",
+   "kind": "onehot",
+   "feature": "order_region",
+   "category": "Central Africa",
+   "coef": 0.15756205162369574
+  },
+  {
+   "name": "order_region_Northern Europe",
+   "kind": "onehot",
+   "feature": "order_region",
+   "category": "Northern Europe",
+   "coef": -0.05090534446125989
+  },
+  {
+   "name": "order_region_South of USA",
+   "kind": "onehot",
+   "feature": "order_region",
+   "category": "South of USA",
+   "coef": 0.08005857761378625
+  },
+  {
+   "name": "order_region_Southern Europe",
+   "kind": "onehot",
+   "feature": "order_region",
+   "category": "Southern Europe",
+   "coef": -0.09896724466100856
+  },
+  {
+   "name": "order_region_West Africa",
+   "kind": "onehot",
+   "feature": "order_region",
+   "category": "West Africa",
+   "coef": -0.09293505974991045
+  },
+  {
+   "name": "order_region_West Asia",
+   "kind": "onehot",
+   "feature": "order_region",
+   "category": "West Asia",
+   "coef": 0.012222121669560698
+  },
+  {
+   "name": "order_region_Western Europe",
+   "kind": "onehot",
+   "feature": "order_region",
+   "category": "Western Europe",
+   "coef": 0.05447905949216712
+  },
+  {
+   "name": "is_after_noon",
+   "kind": "binary",
+   "feature": "is_after_noon",
+   "fill": 0.0,
+   "coef": 0.06635172993063396
+  },
+  {
+   "name": "same_day_after_cutoff",
+   "kind": "binary",
+   "feature": "same_day_after_cutoff",
+   "fill": 0.0,
+   "coef": 5.516119139122435
+  }
+ ],
+ "note": "Exported from model_store/logistic_regression/logistic_regression.joblib by api/scripts/export_browser_model.py"
+}

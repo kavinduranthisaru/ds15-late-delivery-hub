@@ -1,0 +1,68 @@
+{
+ "low": {
+  "order": {
+   "order_date": "2018-01-16T02:07",
+   "shipping_mode": "Same Day",
+   "market": "Pacific Asia",
+   "order_region": "Southeast Asia",
+   "customer_segment": "Corporate",
+   "payment_type": "CASH",
+   "n_lines": 1,
+   "total_qty": 1,
+   "gross_sales": 11.54,
+   "total_discount": 2.31,
+   "max_unit_price": 11.54
+  },
+  "order_id": 76115,
+  "actual_late": 0,
+  "probability": 0.070498,
+  "predicted_late": false,
+  "tier": "Low",
+  "reason": "The main reason is the shipping mode (Same Day), which lowers the risk the most. In the training data, 0% of Same Day orders placed before 12:00 were late (1,281 orders).",
+  "cutoff": 0.604
+ },
+ "mixed": {
+  "order": {
+   "order_date": "2017-12-18T07:14",
+   "shipping_mode": "Standard Class",
+   "market": "Pacific Asia",
+   "order_region": "Eastern Asia",
+   "customer_segment": "Consumer",
+   "payment_type": "DEBIT",
+   "n_lines": 1,
+   "total_qty": 1,
+   "gross_sales": 59.08,
+   "total_discount": 5.32,
+   "max_unit_price": 59.08
+  },
+  "order_id": 74143,
+  "actual_late": 0,
+  "probability": 0.402086,
+  "predicted_late": false,
+  "tier": "Low",
+  "reason": "The main reason is the shipping mode (Standard Class), which lowers the risk the most. In the training data, 40% of Standard Class orders were late (26,614 orders).",
+  "cutoff": 0.604
+ },
+ "high": {
+  "order": {
+   "order_date": "2017-12-16T19:30",
+   "shipping_mode": "Same Day",
+   "market": "Pacific Asia",
+   "order_region": "Eastern Asia",
+   "customer_segment": "Home Office",
+   "payment_type": "TRANSFER",
+   "n_lines": 1,
+   "total_qty": 1,
+   "gross_sales": 31.08,
+   "total_discount": 0.31,
+   "max_unit_price": 31.08
+  },
+  "order_id": 74041,
+  "actual_late": 1,
+  "probability": 0.951374,
+  "predicted_late": true,
+  "tier": "High",
+  "reason": "The main reason is the Same Day noon cut-off: this order came in after 12:00, which raises the risk the most. In the training data, 100% of Same Day orders placed after 12:00 were late (1,123 orders).",
+  "cutoff": 0.604
+ }
+}

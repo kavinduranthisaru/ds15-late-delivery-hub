@@ -1,0 +1,154 @@
+{
+  "source": "dataset.zip rebuilt with Notebook 02 Steps 1a, 1b, 3 and 5; levels from the training window only",
+  "categories": {
+    "shipping_mode": [
+      "First Class",
+      "Same Day",
+      "Second Class",
+      "Standard Class"
+    ],
+    "market": [
+      "Africa",
+      "Europe",
+      "LATAM",
+      "Pacific Asia",
+      "USCA"
+    ],
+    "order_region": [
+      "Canada",
+      "Caribbean",
+      "Central Africa",
+      "Central America",
+      "Central Asia",
+      "East Africa",
+      "East of USA",
+      "Eastern Asia",
+      "Eastern Europe",
+      "North Africa",
+      "Northern Europe",
+      "Oceania",
+      "South America",
+      "South Asia",
+      "South of USA",
+      "Southeast Asia",
+      "Southern Africa",
+      "Southern Europe",
+      "US Center",
+      "West Africa",
+      "West Asia",
+      "West of USA",
+      "Western Europe"
+    ],
+    "customer_segment": [
+      "Consumer",
+      "Corporate",
+      "Home Office"
+    ],
+    "payment_type": [
+      "CASH",
+      "DEBIT",
+      "PAYMENT",
+      "TRANSFER"
+    ]
+  },
+  "market_regions": {
+    "Africa": [
+      "Central Africa",
+      "East Africa",
+      "North Africa",
+      "Southern Africa",
+      "West Africa"
+    ],
+    "Europe": [
+      "Eastern Europe",
+      "Northern Europe",
+      "Southern Europe",
+      "Western Europe"
+    ],
+    "LATAM": [
+      "Caribbean",
+      "Central America",
+      "South America"
+    ],
+    "Pacific Asia": [
+      "Central Asia",
+      "Eastern Asia",
+      "Oceania",
+      "South Asia",
+      "Southeast Asia",
+      "West Asia"
+    ],
+    "USCA": [
+      "Canada",
+      "East of USA",
+      "South of USA",
+      "US Center",
+      "West of USA"
+    ]
+  },
+  "numeric": {
+    "n_lines": {
+      "min": 1.0,
+      "median": 3.0,
+      "max": 5.0
+    },
+    "total_qty": {
+      "min": 1.0,
+      "median": 6.0,
+      "max": 24.0
+    },
+    "gross_sales": {
+      "min": 9.989999771,
+      "median": 559.9300232,
+      "max": 2039.8000336
+    },
+    "total_discount": {
+      "min": 0.0,
+      "median": 51.48999977,
+      "max": 329.99000168
+    },
+    "max_unit_price": {
+      "min": 9.989999771,
+      "median": 199.9900055,
+      "max": 399.980011
+    }
+  },
+  "late_rate_by_mode": {
+    "First Class": 1.0,
+    "Same Day": 0.4671,
+    "Second Class": 0.8003,
+    "Standard Class": 0.3999
+  },
+  "rule_groups": [
+    {
+      "shipping_mode": "First Class",
+      "same_day_after_cutoff": 0,
+      "orders": 6820,
+      "late_rate": 1.0
+    },
+    {
+      "shipping_mode": "Same Day",
+      "same_day_after_cutoff": 0,
+      "orders": 1281,
+      "late_rate": 0.0
+    },
+    {
+      "shipping_mode": "Same Day",
+      "same_day_after_cutoff": 1,
+      "orders": 1123,
+      "late_rate": 1.0
+    },
+    {
+      "shipping_mode": "Second Class",
+      "same_day_after_cutoff": 0,
+      "orders": 8654,
+      "late_rate": 0.8003
+    },
+    {
+      "shipping_mode": "Standard Class",
+      "same_day_after_cutoff": 0,
+      "orders": 26614,
+      "late_rate": 0.3999
+    }
+  ]
+}
