@@ -93,7 +93,7 @@ Ranthisaru T.K.K. (IT24102255): KNN, Linear SVM
 Ratnaweera D.U.A. (IT24102397): Decision Tree, Random Forest
 Maheepala S.A.D.A.O. (IT24102901): AdaBoost, XGBoost
 
-Try the web app: <add your Vercel link here>
+Try the web app: ADD-YOUR-VERCEL-LINK-HERE
 
 Dataset
 Constante, F., Silva, F. and Pereira, A. (2019). DataCo SMART SUPPLY CHAIN FOR BIG DATA ANALYSIS.
