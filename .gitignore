@@ -1,7 +1,5 @@
 # dependencies and builds
 node_modules/
-web/dist/
-web/dev-dist/
 __pycache__/
 .pytest_cache/
 api/.cache/
@@ -16,13 +14,7 @@ sources/*
 # local review output
 screenshots/
 
-# video work files: keep only the scripts and notes
-brag-output/work/*
-!brag-output/work/audio.py
-!brag-output/work/check_voice.py
-!brag-output/work/render.mjs
-!brag-output/work/stills.mjs
-!brag-output/work/grid.mjs
-!brag-output/work/voice-notes.md
-!brag-output/work/predictions.json
+# video output
+brag-output/
+
 *.tsbuildinfo

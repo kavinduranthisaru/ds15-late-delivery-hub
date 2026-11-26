@@ -1,1 +1,0 @@
-We trained 8 models to predict late deliveries on 62,897 DataCo orders, and none of them beat a simple five-group shipping-mode rule. So our champion is the one you can explain: Logistic Regression by Madushani G.R. (IT24102928), 0.7793 test ROC-AUC. IT3091 · Group 2026-DS-15.
